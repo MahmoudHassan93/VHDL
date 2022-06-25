@@ -1,0 +1,53 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_unsigned.all;
+
+entity Counter_tb is
+end entity;
+
+architecture Behavioral of Counter_tb is
+	component Counter			-- define a component for the entity of the design source file that will be tested.
+	Port ( clk : in STD_LOGIC;
+           reset : in STD_LOGIC;
+           startB : in STD_LOGIC;
+           Q : out STD_LOGIC_VECTOR (2 downto 0));
+	end component;
+	
+signal clkt :STD_LOGIC;				----define 4 input signals to test the design
+signal resett :STD_LOGIC;
+signal startBt : STD_LOGIC;
+signal Qt : STD_LOGIC_VECTOR (2 downto 0);
+
+begin
+	uut: Counter
+	port map (clkt,resett,startBt,Qt);    --mapping ports to signals (wiring)
+	
+	P1:process				-- first process for the reset button
+	begin
+	
+	resett <= '1';
+	wait for 10 ns;
+
+	resett <= '0';
+	wait for 650 ns;
+	
+	end process;
+	
+	P2:process			-- second process for the push button
+    	begin
+   	startBt <= '0';
+   	wait for 50 ns;
+    
+   	startBt <= '1';
+   	wait for 450 ns;
+   	end process;
+
+	P3_clock:process		-- last process for the clock
+	begin
+	clkt <= '1';
+	wait for 5 ns;
+	clkt <='0';
+	wait for 5 ns;
+	end process;
+
+end architecture;

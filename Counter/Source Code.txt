@@ -1,0 +1,42 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_unsigned.all;
+-- It defines the logic types std_logic and std_ulogic. These types are also defined for busses --
+-- and called std_logic_vector and std_ulogic_vector.Entity.
+
+entity Counter is
+-- Define the comparator block in terms of input and output ports (design interface) and determine
+-- the size of each port
+    Port ( clk : in STD_LOGIC;			-- Define clk as an input port with one bit (single wire) wide
+           reset : in STD_LOGIC;		-- Define reset as an input port with one bit (single wire) wide
+           startB : in STD_LOGIC;		-- Define startB as an input port with one bit (single wire) wide
+           Q : out STD_LOGIC_VECTOR (2 downto 0));	-- Define Q as an output port with 3-bits (3 wires) wide
+end entity;
+
+architecture Behavioral of Counter is
+-- Define the internal behavior of the entity by showing the relation between inputs and
+--output ports 
+signal outQ : STD_LOGIC_VECTOR (2 downto 0);
+-- will be used instead of using Q directly as the output can not be on the right hand side of the equation -- can not read from it directly only write
+signal div : STD_LOGIC_VECTOR (31 downto 0);  -- 32 bit counter f/2 f/4 f/8 f/16,......... -- another counter to divide the clock
+begin
+        
+        process (clk,reset) 
+        begin
+        if reset = '1' then
+              div <="00000000000000000000000000000000";		-- first process to divide the clock 
+        elsif rising_edge(clk) then
+              div <= div + 1;
+        end if;
+        end process;
+        
+        process (div(24),reset)					-- using 25-bits counter
+        begin
+        if reset = '1' then
+             outQ <="000";
+        elsif rising_edge(div(24)) and startB ='1' then		-- when the clock has rising edge and the push button is pressed
+             outQ <= outQ + 1;					-- increment the counter
+        end if;
+        Q <= outQ;
+        end process; 
+end architecture;
