@@ -1,0 +1,16 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL; --use the IEEE standard library
+
+entity fulladder is
+    Port ( A : in STD_LOGIC;		-- define input A with 1bit wide
+           B : in STD_LOGIC;		-- define input B with 1bit wide	
+           Cin : in STD_LOGIC;		-- define the carry-in input with 1bit wide
+           S : out STD_LOGIC;		-- define output S with 1bit wide
+           Q : out STD_LOGIC);		-- define output Q with 1bit wide
+end fulladder;
+
+architecture Behavioral of fulladder is    --define the behavioral of the fulladder circuit
+begin
+S <= A xor B xor Cin;				--sum equation as extracted from the truth table
+Q <= (A and B) or (Cin AND A) OR (Cin AND B) ;	-- carry-out equaiton as extracted from the truth table
+end Behavioral;

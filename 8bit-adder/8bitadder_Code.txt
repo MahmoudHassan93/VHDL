@@ -1,0 +1,38 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL; --call the IEEE library and include logic types
+
+entity adder_8 is
+    Port ( A : in STD_LOGIC_VECTOR (7 downto 0);   --define A as input with 8-bits size  --input 1 for the adder	
+           B : in STD_LOGIC_VECTOR (7 downto 0);   -- define B as input with 8-bits size -- input 2 for the adder	
+           Cinn: in STD_LOGIC;				--define the carry-in singal --it is always 0 in this design as it is only one 8-bits adder 
+           Q_out : out STD_LOGIC_VECTOR (8 downto 0));  -- define the output with 9-bits wide -- 8-bits for the sum and 1 bit for the last carry-out
+end adder_8;
+
+architecture Behavioral of adder_8 is
+    component fulladder				-- the 1-bit full adder is used as a component as it is the core of the design
+        Port ( A : in STD_LOGIC;
+               B : in STD_LOGIC;
+               Cin : in STD_LOGIC;
+               S : out STD_LOGIC;
+               Q : out STD_LOGIC);
+    end component; 
+    signal temp : STD_LOGIC_VECTOR (7 downto 0); -- signals are used as temporary vaiables to store the carry-out signal of each step
+begin
+u0: fulladder  -- wiring the design as shown in Figure 1. 
+    port map(A => A(0), B => B(0), Cin => Cinn, S => Q_out(0), Q => temp(0));  
+u1: fulladder
+    port map(A => A(1), B => B(1), Cin => temp(0), S => Q_out(1), Q => temp(1));
+u2: fulladder
+    port map(A => A(2), B => B(2), Cin => temp(1), S => Q_out(2), Q => temp(2));
+u3: fulladder
+    port map(A => A(3), B => B(3), Cin => temp(2), S => Q_out(3), Q => temp(3));
+u4: fulladder
+    port map(A => A(4), B => B(4), Cin => temp(3), S => Q_out(4), Q => temp(4));
+u5: fulladder
+    port map(A => A(5), B => B(5), Cin => temp(4), S => Q_out(5), Q => temp(5));  
+u6: fulladder
+    port map(A => A(6), B => B(6), Cin => temp(5), S => Q_out(6), Q => temp(6));
+u7: fulladder
+    port map(A => A(7), B => B(7), Cin => temp(6), S => Q_out(7), Q => Q_out(8));     -- the last carry-out signal is the last bit in the output port Q_out       
+        
+end Behavioral;

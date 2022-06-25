@@ -1,0 +1,50 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;   --using IEEE library and standard logic types
+
+entity bitadder_tb is
+end bitadder_tb;
+ 
+architecture behavior of bitadder_tb is
+ 
+ component adder_8					-- the 8-bit adder is the component under the test
+  Port ( A : in STD_LOGIC_VECTOR (7 downto 0);
+         B : in STD_LOGIC_VECTOR (7 downto 0);
+         Cinn: in STD_LOGIC;
+         Q_out : out STD_LOGIC_VECTOR (8 downto 0));
+ end component;
+ 
+ signal At : STD_LOGIC_VECTOR (7 downto 0);
+ signal Bt : STD_LOGIC_VECTOR (7 downto 0);
+ signal Cinnt : STD_LOGIC;
+ signal Q_outt : STD_LOGIC_VECTOR (8 downto 0);
+
+begin
+ uut: adder_8
+  port map (At,Bt,Cinnt,Q_outt);			--mapping the signals to the adder ports
+ 
+ p1 : process
+ begin
+   At <= "00000000";				-- only 4 test cases were selected to ensure the correctness of the internal structure
+   Bt <= "00000001";
+   Cinnt <= '0';
+   wait for 25 ns;
+
+   At <= "00111000";
+   Bt <= "00000001";
+   Cinnt <= '0';
+   wait for 25 ns;
+
+   At <= "00111000";
+   Bt <= "00010001";
+   Cinnt <= '0';
+   wait for 25 ns;
+
+   At <= "11111111";
+   Bt <= "11111111";
+   Cinnt <= '0';
+   wait for 25 ns;
+
+ end process;
+ 
+end architecture;
+
